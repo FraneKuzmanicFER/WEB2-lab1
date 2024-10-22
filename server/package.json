@@ -17,12 +17,18 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-jwt": "^8.4.1",
+    "express-oauth2-jwt-bearer": "^1.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
     "pg": "^8.13.0",
+    "qrcode": "^1.5.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
     "@types/pg": "^8.11.10",
+    "@types/qrcode": "^1.5.5",
     "nodemon": "^3.1.7"
   }
 }
