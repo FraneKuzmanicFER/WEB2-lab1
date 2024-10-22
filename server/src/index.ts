@@ -68,11 +68,23 @@ app.post('/tickets', checkJwt, async (req: Request, res: Response): Promise<void
     const ticketId = result.rows[0].id;
     client.release();
 
-    const ticketUrl = `http://localhost:${process.env.CLIENT_URL}/ticket/${ticketId}`;
+    const ticketUrl = `${process.env.CLIENT_URL}/ticket/${ticketId}`;
     const qrCodeDataUrl = await QRCode.toDataURL(ticketUrl);
 
+    // Extract the base64 part of the data URL
+    const base64Data = qrCodeDataUrl.split(',')[1];
 
-    res.status(201).json({ qrCode: qrCodeDataUrl });
+    // Convert the base64 string to a buffer
+    const imgBuffer = Buffer.from(base64Data, 'base64');
+
+    // Set the response headers to indicate an image
+    res.writeHead(201, {
+      'Content-Type': 'image/png',
+      'Content-Length': imgBuffer.length
+    });
+
+    // Send the image buffer
+    res.end(imgBuffer);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error creating ticket');
