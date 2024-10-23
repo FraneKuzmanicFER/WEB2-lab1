@@ -91,6 +91,26 @@ app.post('/tickets', checkJwt, async (req: Request, res: Response): Promise<void
   }
 });
 
+app.get('/tickets/:uuid', async (req: Request, res: Response): Promise<void> => {
+  const { uuid } = req.params;
+
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM tickets WHERE id = $1', [uuid]);
+    client.release();
+
+    if (result.rows.length === 0) {
+      res.status(404).send('Ticket not found');
+      return;
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching ticket');
+  }
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
