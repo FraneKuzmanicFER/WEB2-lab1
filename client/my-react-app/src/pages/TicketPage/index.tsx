@@ -2,11 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/axios";
+import { useAuth0 } from "@auth0/auth0-react";
+import "./styles.css";
 
 const TicketPage: React.FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const [ticket, setTicket] = useState<any>(null);
+  const [purchaseTime, setPurchaseTime] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -23,6 +27,13 @@ const TicketPage: React.FC = () => {
     fetchTicket();
   }, [uuid]);
 
+  useEffect(() => {
+    if (ticket) {
+      const time = new Date(ticket.timeofpurchase);
+      setPurchaseTime(time);
+    }
+  }, [ticket]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -32,12 +43,32 @@ const TicketPage: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>Ticket Details</h1>
-      <p>VATIN: {ticket.vatin}</p>
-      <p>First Name: {ticket.firstname}</p>
-      <p>Last Name: {ticket.lastname}</p>
-      <p>Time of Purchase: {ticket.timeofpurchase}</p>
+    <div className="ticket-page-container">
+      <header className="ticket-header">
+        {isAuthenticated && user && (
+          <p>
+            Logged in as: <span> {" " + user.name}</span>
+          </p>
+        )}
+      </header>
+      <div className="ticket-section">
+        <h1 className="ticket-details">Ticket Details</h1>
+        <p>
+          VATIN: <span>{ticket.vatin}</span>
+        </p>
+        <p>
+          First Name: <span>{ticket.firstname}</span>
+        </p>
+        <p>
+          Last Name: <span>{ticket.lastname}</span>
+        </p>
+        <p>
+          Time of Purchase:{" "}
+          <span>
+            {purchaseTime ? purchaseTime.toLocaleTimeString("en-GB") : ""}
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
