@@ -24,8 +24,6 @@ const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Hack but it works
-    // Check if user is authenticated and should redirect to a ticket
     if (isAuthenticated && window.location.pathname.includes("/ticket/")) {
       navigate(window.location.pathname);
     }
