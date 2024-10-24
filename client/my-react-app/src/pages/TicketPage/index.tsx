@@ -44,14 +44,14 @@ const TicketPage: React.FC = () => {
 
   return (
     <div className="ticket-page-container">
-      <header className="ticket-header">
+      <header className="ticket-page-header">
         {isAuthenticated && user && (
           <p>
             Logged in as: <span> {" " + user.name}</span>
           </p>
         )}
       </header>
-      <div className="ticket-section">
+      <div className="ticket-page-section">
         <h1 className="ticket-details">Ticket Details</h1>
         <p>
           VATIN: <span>{ticket.vatin}</span>
