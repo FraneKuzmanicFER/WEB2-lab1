@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 const TicketPage: React.FC = () => {
@@ -11,6 +12,7 @@ const TicketPage: React.FC = () => {
   const [purchaseTime, setPurchaseTime] = useState<Date | null>(null);
   const [loading, setLoading] = useState(true);
   const { user, isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -45,6 +47,7 @@ const TicketPage: React.FC = () => {
   return (
     <div className="ticket-page-container">
       <header className="ticket-page-header">
+        <button onClick={() => navigate("/")}>Go to Home</button>
         {isAuthenticated && user && (
           <p>
             Logged in as: <span> {" " + user.name}</span>
