@@ -8,7 +8,8 @@ dotenv.config();
 
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const PORT = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -112,6 +113,8 @@ app.get('/tickets/:uuid', async (req: Request, res: Response): Promise<void> => 
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+const hostname = '0.0.0.0'; //ne 127.0.0.1
+app.listen(PORT, hostname, () => {
+console.log(`Server locally running at http://${hostname}:${PORT}/ and from
+outside on ${externalUrl}`);
 });
